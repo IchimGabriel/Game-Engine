@@ -50,6 +50,7 @@
     <Compile Include="Classes\HealingPotion.cs" />
     <Compile Include="Classes\PlayerQuest.cs" />
     <Compile Include="Classes\QuestCompletionItem.cs" />
+    <Compile Include="Classes\RandomNumberGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Quest.cs" />
     <Compile Include="Classes\Weapon.cs" />
