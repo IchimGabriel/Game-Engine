@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Item.cs" />
+    <Compile Include="Model\LivingCreature.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Monster.cs" />
     <Compile Include="Model\Player.cs" />
