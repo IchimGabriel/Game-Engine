@@ -40,15 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\InventoryItem.cs" />
     <Compile Include="Classes\Item.cs" />
     <Compile Include="Classes\LivingCreature.cs" />
     <Compile Include="Classes\Location.cs" />
+    <Compile Include="Classes\LootItem.cs" />
     <Compile Include="Classes\Monster.cs" />
     <Compile Include="Classes\Player.cs" />
     <Compile Include="Classes\HealingPotion.cs" />
+    <Compile Include="Classes\PlayerQuest.cs" />
+    <Compile Include="Classes\QuestCompletionItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Classes\Quest.cs" />
     <Compile Include="Classes\Weapon.cs" />
+    <Compile Include="World\World.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
