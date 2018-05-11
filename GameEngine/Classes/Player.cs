@@ -127,9 +127,7 @@ namespace GameEngine
                 {
                     // They have the item in their inventory, so increase the quantity by one     
                     ii.Quantity++;
-                    return;
-
-                    // We added the item, and are done, so get out of this function  
+                    return;  // We added the item, and are done, so get out of this function  
                 }
             }
 

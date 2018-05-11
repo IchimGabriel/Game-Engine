@@ -172,6 +172,7 @@ namespace Game
             this.BtnUsePotion.TabIndex = 14;
             this.BtnUsePotion.Text = "Use Potion";
             this.BtnUsePotion.UseVisualStyleBackColor = true;
+            this.BtnUsePotion.Click += new System.EventHandler(this.BtnUsePotion_Click_1);
             // 
             // BtnNorth
             // 
