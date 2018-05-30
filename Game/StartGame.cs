@@ -45,7 +45,16 @@ namespace Game
 
         }
 
-        private void ScrollToBottomOfMessages() { rtbMessages.SelectionStart = rtbMessages.Text.Length; rtbMessages.ScrollToCaret(); }
+        private void cboWeapons_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _player.CurrentWeapon = (Weapon)cboWeapons.SelectedItem;
+        }
+
+        private void ScrollToBottomOfMessages()
+        {
+            rtbMessages.SelectionStart = rtbMessages.Text.Length;
+            rtbMessages.ScrollToCaret();
+        }
 
         private void BtnNorth_Click(object sender, EventArgs e)
         {
@@ -141,7 +150,7 @@ namespace Game
                             Environment.NewLine;
 
                             rtbMessages.Text += Environment.NewLine;
-                            _player.ExperiencePoints += newLocation.QuestAvailableHere.RewardExperiencePoints;
+                            _player.AddExperiencePoints(newLocation.QuestAvailableHere.RewardExperiencePoints);
                             _player.Gold += newLocation.QuestAvailableHere.RewardGold;
 
                             // Add the reward item to the player's inventory
@@ -254,7 +263,16 @@ namespace Game
         {
             List<Weapon> weapons = new List<Weapon>();
 
-            foreach (InventoryItem inventoryItem in _player.Inventory) { if (inventoryItem.Details is Weapon) { if (inventoryItem.Quantity > 0) { weapons.Add((Weapon)inventoryItem.Details); } } }
+            foreach (InventoryItem inventoryItem in _player.Inventory)
+            {
+                if (inventoryItem.Details is Weapon)
+                {
+                    if (inventoryItem.Quantity > 0)
+                    {
+                        weapons.Add((Weapon)inventoryItem.Details);
+                    }
+                }
+            }
 
             if (weapons.Count == 0)
             {
@@ -264,10 +282,20 @@ namespace Game
             }
             else
             {
+                cboWeapons.SelectedIndexChanged -= cboWeapons_SelectedIndexChanged;
                 cboWeapons.DataSource = weapons;
+                cboWeapons.SelectedIndexChanged += cboWeapons_SelectedIndexChanged;
                 cboWeapons.DisplayMember = "Name";
                 cboWeapons.ValueMember = "ID";
-                cboWeapons.SelectedIndex = 0;
+
+                if (_player.CurrentWeapon != null)
+                {
+                    cboWeapons.SelectedItem = _player.CurrentWeapon;
+                }
+                else
+                {
+                    cboWeapons.SelectedIndex = 0;
+                }
             }
         }
 
@@ -316,7 +344,7 @@ namespace Game
                     Environment.NewLine;
 
                 // Give player experience points for killing the monster
-                _player.ExperiencePoints += _currentMonster.RewardExperiencePoints;
+                _player.AddExperiencePoints(_currentMonster.RewardExperiencePoints);
                 rtbMessages.Text += "You receive " + _currentMonster.RewardExperiencePoints.ToString() +
                     " experience points" + Environment.NewLine;
 
