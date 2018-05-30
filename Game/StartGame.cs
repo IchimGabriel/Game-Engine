@@ -25,19 +25,14 @@ namespace Game
             if (File.Exists(PLAYER_DATA_FILE_NAME))
                 _player = Player.CreatePlayerFromXmlString(File.ReadAllText(PLAYER_DATA_FILE_NAME));
             else
-                _player = Player.CreateDefaultPlayer(); 
+                _player = Player.CreateDefaultPlayer();
+
+            lblHitPoints.DataBindings.Add("Text", _player, "CurrentHitPoints");
+            lblGold.DataBindings.Add("Text", _player, "Gold");
+            lblExperience.DataBindings.Add("Text", _player, "ExperiencePoints");
+            lblLevel.DataBindings.Add("Text", _player, "Level");
 
             MoveTo(_player.CurrentLocation);
-            UpdatePlayerStats();
-        }
-
-        private void UpdatePlayerStats()
-        {
-            // Refresh player information and inventory controls
-            lblHitPoints.Text = _player.CurrentHitPoints.ToString();
-            lblGold.Text = _player.Gold.ToString();
-            lblExperience.Text = _player.ExperiencePoints.ToString();
-            lblLevel.Text = _player.Level.ToString();
         }
 
         private void StartGame_Load(object sender, EventArgs e)
@@ -106,9 +101,6 @@ namespace Game
 
             // Completely heal the player 
             _player.CurrentHitPoints = _player.MaximumHitPoints;
-
-            // Update Hit Points in UI 
-            lblHitPoints.Text = _player.CurrentHitPoints.ToString();
 
             // Does the location have a quest? 
             if (newLocation.QuestAvailableHere != null)
@@ -233,7 +225,6 @@ namespace Game
             // Refresh player's potions combobox 
             UpdatePotionListInUI();
             ScrollToBottomOfMessages();
-            UpdatePlayerStats();
         }
 
         private void UpdateInventoryListInUI()
@@ -395,7 +386,6 @@ namespace Game
                 }
 
                 // Refresh player information and inventory controls
-                UpdatePlayerStats();
                 UpdateInventoryListInUI();
                 UpdateWeaponListInUI();
                 UpdatePotionListInUI();
@@ -417,8 +407,6 @@ namespace Game
                 // Subtract damage from player
                 _player.CurrentHitPoints -= damageToPlayer;
 
-                // Refresh player data in UI 
-                lblHitPoints.Text = _player.CurrentHitPoints.ToString();
                 if (_player.CurrentHitPoints <= 0)
                 {
                     // Display message 
@@ -481,7 +469,6 @@ namespace Game
             }
 
             // Refresh player data in UI 
-            lblHitPoints.Text = _player.CurrentHitPoints.ToString();
             UpdateInventoryListInUI();
             UpdatePotionListInUI();
             ScrollToBottomOfMessages();
