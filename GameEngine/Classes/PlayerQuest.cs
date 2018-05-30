@@ -1,20 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GameEngine
 {
-    public class PlayerQuest
+    public class PlayerQuest : INotifyPropertyChanged
     {
-        public Quest Details { get; set; }
-        public bool IsCompleted { get; set; }
+        private Quest _details;
+        private bool _isCompleted;
+
+        public Quest Details
+        {
+            get => _details;
+            set
+            {
+                _details = value;
+                OnPropertyChanged("Details");
+            }
+        }
+
+        public bool IsCompleted
+        {
+            get => _isCompleted;
+            set
+            {
+                _isCompleted = value;
+                OnPropertyChanged("IsCompleted");
+                OnPropertyChanged("Name");
+            }
+        }
+
+        public string Name => Details.Name;
 
         public PlayerQuest(Quest details)
         {
             Details = details;
             IsCompleted = false;
         }
-    }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+    } 
 }

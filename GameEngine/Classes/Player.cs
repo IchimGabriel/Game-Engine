@@ -1,6 +1,7 @@
 ﻿using System.Xml;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel;
 using System;
 
 namespace GameEngine
@@ -9,24 +10,20 @@ namespace GameEngine
     {
         private int _gold;
         private int _experiencePoints;
+
         public int Gold
         {
-            get
-            {
-                return _gold;
-            }
+            get => _gold;
             set
             {
                 _gold = value;
                 OnPropertyChanged("Gold");
             }
         }
+
         public int ExperiencePoints
         {
-            get
-            {
-                return _experiencePoints;
-            }
+            get => _experiencePoints;
             private set
             {
                 _experiencePoints = value;
@@ -34,19 +31,20 @@ namespace GameEngine
                 OnPropertyChanged("Level");
             }
         }
-        public int Level { get { return ((ExperiencePoints / 100) + 1); } }
+
+        public int Level => ((ExperiencePoints/ 100) + 1);
         public Location CurrentLocation { get; set; }
         public Weapon CurrentWeapon { get; set; }
-        public List<InventoryItem> Inventory { get; set; }
-        public List<PlayerQuest> Quests { get; set; }
+        public BindingList<InventoryItem> Inventory { get; set; }
+        public BindingList<PlayerQuest> Quests { get; set; }
 
         private Player(int currentHitPoints, int maximumHitPoints, int gold, int experiencePoints) 
             : base(currentHitPoints, maximumHitPoints)
         {
             Gold = gold;
             ExperiencePoints = experiencePoints;
-            Inventory = new List<InventoryItem>();
-            Quests = new List<PlayerQuest>();
+            Inventory = new BindingList<InventoryItem>();
+            Quests = new BindingList<PlayerQuest>();
         }
 
         public static Player CreateDefaultPlayer()
@@ -59,7 +57,7 @@ namespace GameEngine
 
         public void AddExperiencePoints(int experiencePointsToAdd)
         {
-            ExperiencePoints += experiencePointsToAdd;
+            ExperiencePoints = ExperiencePoints + experiencePointsToAdd;
             MaximumHitPoints = (Level * 10);
         }
 
@@ -73,22 +71,10 @@ namespace GameEngine
             }
 
             // See if the player has the required item in their inventory    
-            return Inventory.Exists(ii => ii.Details.ID == location.ItemRequiredToEnter.ID); 
+            return Inventory.Any(ii => ii.Details.ID == location.ItemRequiredToEnter.ID); 
         }
 
-        public bool HasThisQuest(Quest quest)
-        {
-            //foreach (PlayerQuest playerQuest in Quests)
-            //{
-            //    if (playerQuest.Details.ID == quest.ID)
-            //    {
-            //        return true;
-            //    }
-            //}
-
-            //return false;
-            return Quests.Exists(pq => pq.Details.ID == quest.ID);
-        }
+        public bool HasThisQuest(Quest quest) => Quests.Any(pq => pq.Details.ID == quest.ID);
 
         public bool CompletedThisQuest(Quest quest)
         {
@@ -102,38 +88,11 @@ namespace GameEngine
             // See if the player has all the items needed to complete the quest here    
             foreach (QuestCompletionItem qci in quest.QuestCompletionItems)
             {
-                //bool foundItemInPlayersInventory = false;
-
-                //// Check each item in the player's inventory,          
-                ////to see if they have it, and enough of it        
-                //foreach (InventoryItem ii in Inventory)
-                //{
-                //    // The player has the item in their inventory            
-                //    if (ii.Details.ID == qci.Details.ID)
-                //    {
-                //        foundItemInPlayersInventory = true;
-
-                //        // The player does not have enough of this item  
-                //        //to complete the quest          
-                //        if (ii.Quantity < qci.Quantity)
-                //        {
-                //            return false;
-                //        }
-                //    }
-                //}
-
-                //// The player does not have any of this quest 
-                ////completion item in their inventory       
-                //if (!foundItemInPlayersInventory)
-                //{
-                //    return false;
-                //}
-                if (!Inventory.Exists(ii => ii.Details.ID == qci.Details.ID && ii.Quantity >= qci.Quantity))
+                if (!Inventory.Any(ii => ii.Details.ID == qci.Details.ID && ii.Quantity >= qci.Quantity))
                 {
                     return false;
                 }
             }
-
             // If we got here, then the player must have all the required    
             // items, and enough of them, to complete the quest. 
             return true;
@@ -143,16 +102,6 @@ namespace GameEngine
         {
             foreach (QuestCompletionItem qci in quest.QuestCompletionItems)
             {
-                //foreach (InventoryItem ii in Inventory)
-                //{
-                //    if (ii.Details.ID == qci.Details.ID)
-                //    {
-                //        // Subtract the quantity from the player's                    
-                //        //inventory that was needed to complete the quest               
-                //        ii.Quantity -= qci.Quantity;
-                //        break;
-                //    }
-                //}
                 InventoryItem item = Inventory.SingleOrDefault(ii => ii.Details.ID == qci.Details.ID);
 
                 if (item != null)
