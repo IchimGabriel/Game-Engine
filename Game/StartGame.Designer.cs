@@ -294,6 +294,7 @@ namespace Game
             this.Controls.Add(this.label1);
             this.Name = "StartGame";
             this.Text = "Adventure Game";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.StartGame_FormClosing);
             this.Load += new System.EventHandler(this.StartGame_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvInventory)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvQuests)).EndInit();
